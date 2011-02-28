@@ -20,7 +20,7 @@ class DB {
     
     protected $charset;
     
-    function __construct($type, $name) {
+    function __construct($type, $name = null) {
         $this->type = $type;
         $this->name = $name;
     }
@@ -60,7 +60,10 @@ class DB {
     }
     
     protected function getDsn() {
-        $dsn = "{$this->type}:dbname={$this->name};";
+        $dsn = "{$this->type}:";
+        if ($this->name) {
+            $dsn .= "dbname={$this->name};";
+        }
         if ($this->socket) {
             $dsn .= "unix_socket={$this->socket};";
         }
