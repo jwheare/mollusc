@@ -1,0 +1,153 @@
+html {
+    font: normal 1.1em 'Helvetica', 'Arial', sans-serif;
+}
+body {
+    margin: 0;
+    padding: 0 0 1em 0;
+    min-width: 700px;
+}
+
+a img {
+    border: 0;
+}
+
+
+input, textarea {
+    font: normal 1.1em 'Helvetica', 'Arial', sans-serif;
+}
+
+table {
+    border: 0;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+table td,
+table th {
+    vertical-align: top;
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6,
+p,
+form,
+table {
+    margin: 0.7em 0;
+}
+h1 { font-size: 1.5em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.3em; }
+h4 { font-size: 1.2em; }
+h5 { font-size: 1.1em; }
+h6 { font-size: 1.0em; }
+
+#content {
+    padding: 0 0.7em;
+    margin: 0.5em;
+}
+
+h1 {
+    font-family: "Arial Rounded MT Bold";
+    color: #fff;
+    margin-top: 0;
+}
+h1 a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    background-color: #26388c;
+    padding: 0.3em 1em;
+}
+h1 a:hover {
+    background-color: #01a6eb;
+}
+
+h3.month {
+    float: left;
+}
+
+p.totals {
+    font-size: 1.3em;
+    float: right;
+}
+
+p.totals span.bull {
+    color: #bbb;
+}
+
+table.graph {
+    margin: 1em 0;
+    table-layout: fixed;
+}
+table.graph td {
+    padding: 0;
+}
+table.graph tr.bars td {
+    vertical-align: bottom;
+    border-bottom: 1px solid #ddd;
+}
+table.graph tr.bars a.bar {
+    margin-right: 1px;
+    position: relative;
+    display: block;
+    background-color: #eee;
+}
+table.graph tr.bars a.bar:hover {
+    background-color: #26388c;
+}
+table.graph tr.bars span.low {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #e5e5e5;
+}
+table.graph tr.bars a.bar:hover span.low {
+    background-color: #01a6eb;
+}
+table.graph tr.bars span.limit {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+    padding-right: 1px;
+    height: 1px;
+    border-top: 1px solid red;
+}
+table.graph tr.days td {
+    padding-top: 5px;
+    text-align: center;
+}
+
+table.history {
+    border-bottom: 1px solid #ddd;
+    table-layout: fixed;
+}
+table.history td,
+table.history th {
+    padding: 3px;
+}
+table.history tr.credit td {
+    background-color: lightgreen;
+}
+table.history tr.warning td {
+    background-color: pink;
+}
+table.history td.action,
+table.history th.action {
+    width: 120px;
+}
+table.history td.date,
+table.history th.date {
+    width: 200px;
+}
+table.history td.fare,
+table.history td.balance,
+table.history th.fare,
+table.history th.balance {
+    text-align: right;
+    width: 100px;
+}
+table.history tr:last-child td {
+    padding-bottom: 1.7em;
+}
