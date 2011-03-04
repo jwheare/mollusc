@@ -86,11 +86,14 @@ table.graph tr.bars td {
     vertical-align: bottom;
     border-bottom: 1px solid #ddd;
 }
-table.graph tr.bars a.bar {
+table.graph tr.bars .bar {
     margin-right: 1px;
     position: relative;
     display: block;
     background-color: #eee;
+}
+table.graph tr.bars span.notravel {
+    background-color: #f5f5f5;
 }
 table.graph tr.bars a.bar:hover {
     background-color: #26388c;

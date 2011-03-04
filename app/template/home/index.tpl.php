@@ -10,13 +10,28 @@ if ($this->events) {
             <span class="bull">•</span>
             Topups: <strong>£<?php out(sprintf('%.2f', $topupTotal/100)); ?></strong>
         </p>
-        <?php $reversed = array_reverse($daysBalance, true);
+        <?php
+        if ($lastDate->format('j') > 1) {
+            $firstBalDay = $lastDate->format('j');
+            $firstBal = $daysBalance[$firstBalDay];
+            foreach (range($firstBalDay - 1, 1) as $d) {
+                $daysBalance[$d] = false;
+                $lowDaysBalance[$d] = null;
+            }
+        }
+        $reversed = array_reverse($daysBalance, true);
         $lastBal = $lastBalDay = null; ?>
         <table class="graph">
             <tr class="bars">
                 <?php foreach ($reversed as $day => $bal):
-                    $lowBal = $lowDaysBalance[$day]; ?>
-                    <td><a href="#<?php out($lastDate->format('Y-m-') . (($bal === false) ? $lastBalDay : $day)); ?>" class="bar" style="height: <?php out(($bal === false ? $lastBal : $bal)/10); ?>px;" title="£<?php out(sprintf('%.2f', ($bal === false ? $lastBal : $bal)/100)); ?><?php if ($lowBal && $lowBal < $bal): ?> (low £<?php out(sprintf('%.2f', $lowBal/100)); ?>)<?php endif; ?>"><?php if ($lowBal && $lowBal < $bal): ?><span class="low" style="height: <?php out($lowBal/10); ?>px;"></span><?php endif; ?><span class="limit"></span></a></td>
+                    $lowBal = $lowDaysBalance[$day];
+                    $outBal = $bal;
+                    $noTravel = false;
+                    if ($outBal === false):
+                        $noTravel = true;
+                        $outBal = $lastBal ? $lastBal : $firstBal;
+                    endif; ?>
+                    <td><<?php if ($bal !== false): ?>a href="#<?php out($lastDate->format('Y-m-') . $day); ?>"<?php else: ?>span<?php endif; ?> class="bar<?php if ($noTravel): ?> notravel<?php endif; ?>" style="height: <?php out($outBal/10); ?>px;" title="£<?php out(sprintf('%.2f', $outBal/100)); ?><?php if ($lowBal && $lowBal < $bal): ?> (low £<?php out(sprintf('%.2f', $lowBal/100)); ?>)<?php endif; ?>"><?php if ($lowBal && $lowBal < $bal): ?><span class="low" style="height: <?php out($lowBal/10); ?>px;"></span><?php endif; ?><span class="limit"></span></<?php if ($bal !== false): ?>a<?php else: ?>span<?php endif; ?>></td>
                 <?php $lastBal = $bal ? $bal : $lastBal;
                 $lastBalDay = $bal ? $day : $lastBalDay;
                 endforeach; ?>
@@ -85,7 +100,7 @@ if ($this->events) {
             if (!$lowDaysBalance[$day] || $lowDaysBalance[$day] > $db) {
                 $lowDaysBalance[$day] = $db;
             }
-        
+            
             $fareSign = '';
             if ($fare < 0) {
                 $fare *= -1;
@@ -99,7 +114,7 @@ if ($this->events) {
                 $class = 'credit';
                 $topupTotal += $fare;
             }
-        
+            
             if ($lastExit) {
                 $balance = $lastExit->balance;
             } else {
