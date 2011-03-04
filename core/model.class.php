@@ -146,7 +146,8 @@ class Model extends RelationshipCache {
         }
         $wheres = array();
         $flatValues = array();
-        foreach (array_combine($keys, $values) as $key => $value) {
+        foreach ($keys as $i => $key) {
+            $value = $values[$i];
             if (is_array($value)) {
                 $orPlaceholders = array();
                 foreach ($value as $orValue) {
@@ -158,7 +159,11 @@ class Model extends RelationshipCache {
             } else {
                 list ($flatValue, $placeholder) = $this->flattenValueSql($value);
                 $flatValues[] = $flatValue;
-                $wheres[] = "`$key` = $placeholder";
+                if (is_array($key)) {
+                    $wheres[] = "`{$key[0]}` {$key[1]} $placeholder";
+                } else {
+                    $wheres[] = "`$key` = $placeholder";
+                }
             }
         }
         $query = "SELECT {$this->getColumnsSql()} FROM {$this->table} WHERE " . implode(' AND ', $wheres) . " LIMIT 1";
@@ -181,7 +186,8 @@ class Model extends RelationshipCache {
             }
             $wheres = array();
             $flatValues = array();
-            foreach (array_combine($keys, $values) as $key => $value) {
+            foreach ($keys as $i => $key) {
+                $value = $values[$i];
                 if (is_array($value)) {
                     $orPlaceholders = array();
                     foreach ($value as $orValue) {
@@ -193,7 +199,11 @@ class Model extends RelationshipCache {
                 } else {
                     list ($flatValue, $placeholder) = $this->flattenValueSql($value);
                     $flatValues[] = $flatValue;
-                    $wheres[] = "`$key` = $placeholder";
+                    if (is_array($key)) {
+                        $wheres[] = "`{$key[0]}` {$key[1]} $placeholder";
+                    } else {
+                        $wheres[] = "`$key` = $placeholder";
+                    }
                 }
             }
         } else {
@@ -206,6 +216,7 @@ class Model extends RelationshipCache {
     }
     private function getAllByData($keys = null, $values = null, $limit = null, $page = 1, $ordering = "creation_date DESC") {
         $query = "SELECT %s FROM $this->table ";
+        $flatValues = null;
         if ($keys) {
             if (!is_array($keys)) {
                 $keys = array($keys);
@@ -215,7 +226,8 @@ class Model extends RelationshipCache {
             }
             $wheres = array();
             $flatValues = array();
-            foreach (array_combine($keys, $values) as $key => $value) {
+            foreach ($keys as $i => $key) {
+                $value = $values[$i];
                 if (is_array($value)) {
                     $orPlaceholders = array();
                     foreach ($value as $orValue) {
@@ -227,15 +239,17 @@ class Model extends RelationshipCache {
                 } else {
                     list ($flatValue, $placeholder) = $this->flattenValueSql($value);
                     $flatValues[] = $flatValue;
-                    $wheres[] = "`$key` = $placeholder";
+                    if (is_array($key)) {
+                        $wheres[] = "`{$key[0]}` {$key[1]} $placeholder";
+                    } else {
+                        $wheres[] = "`$key` = $placeholder";
+                    }
                 }
             }
             $query .= "WHERE " . implode(' AND ', $wheres) . " ";
-        } else {
-            $flatValues = $values;
         }
         // Get the total
-        $total = (int) $this->db()->fetchColumn(sprintf($query, "COUNT(id)"), $flatValues);
+        $total = (int) $this->db()->fetchColumn(sprintf($query, "COUNT(*)"), $flatValues);
         // Run the paginated query
         $query .= "ORDER BY $ordering ";
         if ($limit) {
