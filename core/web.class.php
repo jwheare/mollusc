@@ -18,10 +18,18 @@ class Web {
         }
         
         // Setup the dispatcher with App URL patterns
-        $dispatcher = new Dispatcher($request, array_merge(App\Route::getPatterns(), self::getPatterns()));
+        $routes = self::getPatterns();
+        if (class_exists('App\Route')) {
+            $routes = array_merge(App\Route::getPatterns(), $routes);
+        }
+        $dispatcher = new Dispatcher($request, $routes);
         
         // Encapsulate the user session
-        $session = new Session($request);
+        if (class_exists('App\Session')) {
+            $session = new App\Session($request);
+        } else {
+            $session = new Session($request);
+        }
         $request->setSession($session);
         
         // Process the request
