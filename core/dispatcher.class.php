@@ -60,12 +60,16 @@ class Dispatcher {
         }
         $type = strtolower($type);
         // Map URL to controller via patterns
-        $action = 'index'; // default
+        $action = 'index';
+        $name = 'home';
         foreach ($this->routes as $pattern => $route) {
             if (preg_match($pattern, substr($this->request->getUrlPart('path'), 1), $args)) {
-                $name = $route;
-                if (strpos($name, '$') === 0) {
-                    $name = $args[substr($name, 1)];
+                if (strpos($route, '$') === 0) {
+                    if ($args[substr($route, 1)]) {
+                        $name = $args[substr($route, 1)];
+                    }
+                } else {
+                    $name = $route;
                 }
                 if (isset($args['ACTION']) && $args['ACTION']) {
                     $action = $args['ACTION'];
