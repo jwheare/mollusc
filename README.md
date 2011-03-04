@@ -29,4 +29,4 @@ Oyster only make 8 weeks data available at a time, but Mollusc will keep old dat
 
 To change the red fare warning threshold, edit the `FARE_WARNING` constant in `app/conf/conf.php`. It’s in pence.
 
-![Screenshot](mollusc/raw/master/screenshot.png)
+![Screenshot](/jwheare/mollusc/raw/master/screenshot.png)
