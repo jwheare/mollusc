@@ -7,7 +7,7 @@ Oyster only make 8 weeks data available at a time, but Mollusc will keep old dat
 # Required
 
 * Linux/Mac OS X
-* Apache (2 probably?)
+* Apache (2 probably?) with the rewrite module enabled
 * MySQL (5 probably?)
 * PHP 5.3
 
