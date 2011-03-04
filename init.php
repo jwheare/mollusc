@@ -34,6 +34,12 @@ spl_autoload_register(function ($class) {
 });
 
 require_once('util.php');
+
 require_once('conf.php');
-require_once(gethostname() . '.conf.php');
-require_once(APP_DIR . '/init.php');
+if (file_exists(CONF_DIR . '/' . gethostname() . '.conf.php')) {
+    require_once(gethostname() . '.conf.php');
+}
+
+if (file_exists(APP_DIR . '/init.php')) {
+    require_once(APP_DIR . '/init.php');
+}
