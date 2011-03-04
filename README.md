@@ -21,7 +21,7 @@ Oyster only make 8 weeks data available at a time, but Mollusc will keep old dat
 3. Edit `apache-vhost.conf`, changing all occurrences of `/path/to/install` to the path where you copied this directory. Set your `ServerName`. Make it password protected if you like.
 4. Run `script/initdb.php` and answer the questions as prompted to setup the database.
 5. Run `script/fetch.php` to import your journey history. You’ll probably want to put this in cron to run once a day or something.
-6. Put `Include /path/to/install/apache-vhost.conf` somewhere in your Apache config and restart
+6. Put `Include /path/to/install/apache-vhost.conf` somewhere appropriate to your OS Apache config and restart Apache.
 7. Point your DNS at your webserver (or `/etc/hosts` file if you’re running it locally).
 8. Enjoy!
 
