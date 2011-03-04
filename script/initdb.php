@@ -4,5 +4,5 @@
 $_SERVER['ROOT_DIR'] = realpath(dirname(__FILE__) . '/..');
 require_once($_SERVER['ROOT_DIR'] . '/init.php');
 
-$script = new App\Script\Init();
+$script = new Core\InitDBScript();
 $script->run();

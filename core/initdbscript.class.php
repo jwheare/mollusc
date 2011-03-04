@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Script;
-use App\Model;
-use Core\Script;
-use Core\DB;
+namespace Core;
 
-class Init extends Script {
+class InitDBScript extends Script {
     
     public function run () {
         $rootDBUser = 'root';
@@ -27,14 +24,14 @@ class Init extends Script {
         $db->setCredentials($rootDBUser, $rootDBPassword);
         
         $create = "CREATE DATABASE IF NOT EXISTS " . MYSQL_DB . " DEFAULT CHARACTER SET = 'utf8'";
-        $grant = "GRANT ALL ON " . MYSQL_DB . ".* TO '" . MYSQL_USER . "'@'localhost'";
+        $grant = "GRANT ALL ON " . MYSQL_DB . ".* TO '" . MYSQL_USER . "'@'localhost' IDENTIFIED BY ?";
         $this->out("\n$create\n$grant\n\nWe’ll now run the above queries, if you’d rather we didn’t, just type 'n' and press return:\n");
         $input = strtolower(trim(fgets(STDIN)));
         if ($input && ($input[0] == 'n' || $input == 0)) {
             $this->error("Fine. Sorry we even asked. Geeze.");
         }
         $db->execute($create);
-        $db->execute($grant);
+        $db->execute($grant, array(MYSQL_PASSWORD));
         
         // Now use the main service DB to load the schemas
         $this->out("Loading schemas:\n");
@@ -48,7 +45,7 @@ class Init extends Script {
             $this->out("$schema\n");
             service('db')->execute(file_get_contents("$schemaDir/$schema"));
         }
-        $this->out("\nAll done! Now run import.php to fetch your journey history\n");
+        $this->out("\nAll done!\n");
         
         $this->end();
     }
