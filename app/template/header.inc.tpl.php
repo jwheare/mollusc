@@ -14,7 +14,6 @@
         <?php if (isset($shorter)): ?>
         <link rev="canonical" href="<?php out($shorter); ?>">
         <?php endif; ?>
-        <?php if (isset($cssInclude)) echo $cssInclude; ?>
         <?php if (isset($description)): ?>
         <meta name="description" content="<?php out($description); ?>">
         <?php endif; ?>

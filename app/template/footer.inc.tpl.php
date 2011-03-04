@@ -1,6 +1,4 @@
+            <p id="footer">Check <a href="http://github.com/jwheare/mollusc">GitHub</a> for updates</p>
         </div>
-        
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-        <?php if (isset($jsInclude)) echo $jsInclude; ?>
     </body>
 </html>
