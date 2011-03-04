@@ -92,7 +92,7 @@ if ($this->events) {
                 $fareTotal += $fare;
                 $class = 'debit';
                 $fareSign = '-';
-                if ($fare > 300) {
+                if ($fare > FARE_WARNING) {
                     $class .= ' warning';
                 }
             } else if ($fare > 0) {

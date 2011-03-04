@@ -1,5 +1,7 @@
 Mollusc is a browser for your Oyster pay as you go history. You can run it on your server or localhost.
 
+You’ll get a bar chart and table of your balance by month. Top ups are highlighted in green, fares above £3 in red.
+
 # Required
 
 * MySQL
@@ -18,3 +20,7 @@ Mollusc is a browser for your Oyster pay as you go history. You can run it on yo
 6. Put `Include /path/to/install/apache-vhost.conf` somewhere in your Apache config and restart
 7. Point your DNS at your webserver (or /etc/hosts file if you’re running it locally).
 8. Enjoy!
+
+# Configuration
+
+To change the red fare warning threshold, edit the `FARE_WARNING` constant in `app/conf/conf.php`. It’s in pence.
