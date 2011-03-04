@@ -6,7 +6,9 @@ Oyster only make 8 weeks data available at a time, but Mollusc will keep old dat
 
 # Required
 
-* MySQL
+* Linux/Mac OS X
+* Apache (2 probably?)
+* MySQL (5 probably?)
 * PHP 5.3
 
 # Installation
