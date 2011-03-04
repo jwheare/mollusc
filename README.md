@@ -1,3 +1,5 @@
+Mollusc is a browser for your Oyster pay as you go history. You can run it on your server or localhost.
+
 # Required
 
 * MySQL
