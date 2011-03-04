@@ -6,7 +6,10 @@
 
 //  Remove this line for production conf
 define('DEV', true);
-// While this is true, any emails the system sends will instead go to a log file mail.log in the project root
+
+// While this is true, any emails the system sends (if it does send any) will instead
+// go to a log file mail.log in the project root. Remove the line if you want emails to be
+// sent instead.
 define('DISABLE_EMAILS', true);
 
 define('SITE_EMAIL', 'your@email.address');
