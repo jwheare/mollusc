@@ -154,3 +154,8 @@ table.history th.balance {
     text-align: right;
     width: 100px;
 }
+
+table.history td.location img {
+    margin-top: -3px;
+    vertical-align: middle;
+}

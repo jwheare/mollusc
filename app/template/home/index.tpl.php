@@ -143,6 +143,15 @@ if ($this->events) {
                     </td>
                     <td class="action">Journey</td>
                     <td class="location">
+                        <?php if (preg_match("/.* \[london overground\]$/i", $event->location) || preg_match("/.* \[london overground\]$/i", $lastExit->location)): ?>
+                            <img src="/overground.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* \[london underground\]$/i", $event->location) || preg_match("/.* \[london underground\]$/i", $lastExit->location)): ?>
+                            <img src="/tube.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* DLR$/i", $event->location) || preg_match("/.* DLR$/i", $lastExit->location)): ?>
+                            <img src="/dlr.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* \[national rail\]$/i", $event->location) || preg_match("/.* \[national rail\]$/i", $lastExit->location)): ?>
+                            <img src="/Rail.gif">
+                        <?php endif; ?>
                         <?php out($event->location); ?>
                         ⟼
                         <?php out($lastExit->location); ?>
@@ -157,7 +166,22 @@ if ($this->events) {
                 <?php endif; ?>>
                     <td class="date"><?php out($event->creation_date->format('D d H:i')); ?></td>
                     <td class="action"><?php out($event->action); ?></td>
-                    <td class="location"><?php out($event->location); ?></td>
+                    <td class="location">
+                        <?php if (preg_match("/^bus .*$/i", $event->location)): ?>
+                            <img src="/Bus.gif">
+                        <?php elseif (preg_match("/.* tramstop$/i", $event->location)): ?>
+                            <img src="/tram.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* \[london overground\]$/i", $event->location)): ?>
+                            <img src="/overground.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* \[london underground\]$/i", $event->location)): ?>
+                            <img src="/tube.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* DLR$/i", $event->location)): ?>
+                            <img src="/dlr.gif" width="26" height="21">
+                        <?php elseif (preg_match("/.* \[national rail\]$/i", $event->location)): ?>
+                            <img src="/Rail.gif">
+                        <?php endif; ?>
+                        <?php out($event->location); ?>
+                    </td>
                     <td class="fare"><?php if ($fare): ?><?php out($fareSign); ?>£<?php out(sprintf('%.2f', $fare/100)); ?><?php endif; ?></td>
                     <td class="balance"><?php if ($balance): ?><?php out($balanceSign); ?>£<?php out(sprintf('%.2f', $balance/100)); ?><?php endif; ?></td>
                 </tr>
