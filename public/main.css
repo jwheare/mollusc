@@ -130,6 +130,9 @@ table.history td,
 table.history th {
     padding: 3px;
 }
+table.history tr.newDate td {
+    border-top: 1px solid #ddd;
+}
 table.history tr.credit td {
     background-color: lightgreen;
 }
@@ -150,7 +153,4 @@ table.history th.fare,
 table.history th.balance {
     text-align: right;
     width: 100px;
-}
-table.history tr:last-child td {
-    padding-bottom: 1.7em;
 }
