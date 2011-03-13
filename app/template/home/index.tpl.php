@@ -145,7 +145,7 @@ if ($this->events) {
                     <td class="location">
                         <?php if (preg_match("/.* \[london overground\]$/i", $event->location) || preg_match("/.* \[london overground\]$/i", $lastExit->location)): ?>
                             <img src="/overground.gif" width="26" height="21">
-                        <?php elseif (preg_match("/.* \[london underground\]$/i", $event->location) || preg_match("/.* \[london underground\]$/i", $lastExit->location)): ?>
+                        <?php elseif (preg_match("/.* (?:\[london underground\])|(?:line[s]?\))|(?:gate[s]? only\))$/i", $event->location) || preg_match("/.* (?:\[london underground\])|(?:line[s]?\))|(?:gate[s]? only\))$/i", $lastExit->location)): ?>
                             <img src="/tube.gif" width="26" height="21">
                         <?php elseif (preg_match("/.* DLR$/i", $event->location) || preg_match("/.* DLR$/i", $lastExit->location)): ?>
                             <img src="/dlr.gif" width="26" height="21">
@@ -173,7 +173,7 @@ if ($this->events) {
                             <img src="/tram.gif" width="26" height="21">
                         <?php elseif (preg_match("/.* \[london overground\]$/i", $event->location)): ?>
                             <img src="/overground.gif" width="26" height="21">
-                        <?php elseif (preg_match("/.* \[london underground\]$/i", $event->location)): ?>
+                        <?php elseif (preg_match("/.* (?:\[london underground\])|(?:line[s]?\))|(?:gate[s]? only\))$/i", $event->location)): ?>
                             <img src="/tube.gif" width="26" height="21">
                         <?php elseif (preg_match("/.* DLR$/i", $event->location)): ?>
                             <img src="/dlr.gif" width="26" height="21">
