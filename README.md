@@ -4,6 +4,8 @@ You’ll get a bar chart and table breakdown of how your balance changed each mo
 
 Oyster only make 8 weeks data available at a time, but Mollusc will keep old data forever once you start importing it.
 
+![Screenshot](/jwheare/mollusc/raw/master/screenshot.png)
+
 # Required
 
 * Linux/Mac OS X
@@ -28,5 +30,3 @@ Oyster only make 8 weeks data available at a time, but Mollusc will keep old dat
 # Configuration
 
 To change the red fare warning threshold, edit the `FARE_WARNING` constant in `app/conf/conf.php`. It’s in pence.
-
-![Screenshot](/jwheare/mollusc/raw/master/screenshot.png)
