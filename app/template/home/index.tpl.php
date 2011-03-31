@@ -125,12 +125,12 @@ if ($this->events) {
                 $balance *= -1;
                 $balanceSign = '-';
             }
+            $newDate = false;
+            if (!$lastDate || $lastDate->format('Y-m-j') != $lastExit->creation_date->format('Y-m-j')) {
+                $newDate = true;
+                $class .= ' newDate';
+            }
             if ($lastExit):
-                $newDate = false;
-                if (!$lastDate || $lastDate->format('Y-m-j') != $lastExit->creation_date->format('Y-m-j')) {
-                    $newDate = true;
-                    $class .= ' newDate';
-                }
             ?>
                 <tr class="<?php out($class); ?>"<?php if ($newDate): ?>
                     id="<?php out($lastExit->creation_date->format('Y-m-j')); ?>"
