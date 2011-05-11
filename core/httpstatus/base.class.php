@@ -21,6 +21,13 @@ function getErrorMap () {
 
 class Base extends Exception {
     protected $text;
+    protected $template;
+    public function getTemplate () {
+        return $this->template;
+    }
+    public function setTemplate ($template) {
+        $this->template = $template;
+    }
     public function getText() {
         return $this->text;
     }
