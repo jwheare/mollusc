@@ -4,21 +4,6 @@ namespace Core\Controller;
 use Core\Request;
 use Core\Response;
 
-function getClasses () {
-    return array(
-        "text/html" => array(
-            "Html" => "GET",
-            "Form" => "POST",
-        ),
-        "application/json" => array(
-            "JsonGet" => "GET",
-            "JsonPost" => "POST",
-            "JsonPut" => "PUT",
-            "JsonDelete" => "DELETE",
-        ),
-    );
-}
-
 abstract class Base {
     public $request;
     public $response;

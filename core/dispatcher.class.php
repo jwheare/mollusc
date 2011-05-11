@@ -85,7 +85,7 @@ class Dispatcher {
     protected function getControllerSupport ($controllerRoot, $action, $requestMethod) {
         $methods = array();
         $mimeTypes = array();
-        $classes = Controller\getClasses();
+        $classes = Controller::getClasses();
         foreach ($classes as $mimeType => $typeClasses) {
             foreach ($typeClasses as $type => $method) {
                 $controllerClass = $controllerRoot . $type;
