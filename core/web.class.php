@@ -17,13 +17,6 @@ class Web {
             ini_set('html_errors', 0);
         }
         
-        // Setup the dispatcher with App URL patterns
-        $routes = self::getPatterns();
-        if (class_exists('App\Route')) {
-            $routes = array_merge(App\Route::getPatterns(), $routes);
-        }
-        $dispatcher = new Dispatcher($request, $routes);
-        
         // Encapsulate the user session
         if (class_exists('App\Session')) {
             $session = new App\Session($request);
@@ -31,6 +24,13 @@ class Web {
             $session = new Session($request);
         }
         $request->setSession($session);
+        
+        // Setup the dispatcher with App URL patterns
+        $routes = self::getPatterns();
+        if (class_exists('App\Route')) {
+            $routes = array_merge(App\Route::getPatterns($request), $routes);
+        }
+        $dispatcher = new Dispatcher($request, $routes);
         
         // Process the request
         $response = $dispatcher->processRequest($request);
