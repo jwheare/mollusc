@@ -126,6 +126,7 @@ class Dispatcher {
         // Choose a controller class to deal with this request
         $controllerRoot = "App\\Controller\\{$name}";
         $controllerClass = $controllerRoot . $type;
+        $sharedClass = "{$controllerRoot}Shared";
         
         if (!$this->doesControllerActionExist($controllerClass, $action)) {
             
@@ -147,17 +148,25 @@ class Dispatcher {
                 throw $exception;
             }
             
-            // c) 404d!
+            // c) Shared class exists
+            if (class_exists($sharedClass)) {
+                $shared = new $sharedClass($this->request, $name, $action, $args);
+                $shared->setUp();
+                return $shared;
+            }
+            
+            // d) 404d
             throw new HttpStatus\NotFound();
         }
-        $controller = new $controllerClass($this->request, $name, $action, $args);
         
-        // Run the shared controller
-        $sharedClass = "{$controllerRoot}Shared";
+        $controller = new $controllerClass($this->request, $name, $action, $args);
+        // Run the shared controller action
         if (class_exists($sharedClass)) {
-            $shared = new $sharedClass($controller, $name, $action);
-            $shared->processSetUp();
+            $shared = new $sharedClass($this->request, $name, $action, $args, $controller);
+            $shared->setUp();
+            $shared->action();
         }
+        
         return $controller;
     }
     

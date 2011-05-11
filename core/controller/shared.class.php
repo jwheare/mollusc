@@ -3,14 +3,12 @@
 namespace Core\Controller;
 use Core\Request;
 
-abstract class Shared {
-    private $controller;
-    private $name;
-    private $action;
-    public function __construct (Base $controller, $name, $action) {
+abstract class Shared extends Base {
+    protected $controller;
+    public function __construct (Request $request, $name, $action, array $args, Base $controller = null) {
+        parent::__construct($request, $name, $action, $args);
+        
         $this->controller = $controller;
-        $this->name = $name;
-        $this->action = $action;
     }
     public function __get ($name) {
         return $this->controller->$name;
@@ -18,20 +16,13 @@ abstract class Shared {
     public function __set ($name, $value) {
         $this->controller->$name = $value;
     }
-    public function __call ($method, $args) {
-        return call_user_func_array(array($this->controller, $method), $args);
-    }
-    protected function action () {
+    public function action () {
         if (!method_exists($this, $this->action)) {
-            return false;
+            return null;
         }
         return $this->{$this->action}();
     }
     public function setUp () {
         // Override in subclass
-    }
-    public function processSetUp () {
-        $this->setUp();
-        $this->action();
     }
 }
