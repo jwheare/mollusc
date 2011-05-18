@@ -151,8 +151,10 @@ class Dispatcher {
             // c) Shared class exists
             if (class_exists($sharedClass)) {
                 $shared = new $sharedClass($this->request, $name, $action, $args);
-                $shared->setUp();
-                return $shared;
+                if ($shared->hasAction()) {
+                    $shared->setUp();
+                    return $shared;
+                }
             }
             
             // d) 404d

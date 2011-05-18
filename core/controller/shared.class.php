@@ -16,8 +16,11 @@ abstract class Shared extends Base {
     public function __set ($name, $value) {
         $this->controller->$name = $value;
     }
+    public function hasAction () {
+        return method_exists($this, $this->action);
+    }
     public function action () {
-        if (!method_exists($this, $this->action)) {
+        if (!$this->hasAction()) {
             return null;
         }
         return $this->{$this->action}();
