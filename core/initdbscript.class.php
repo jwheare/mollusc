@@ -20,7 +20,13 @@ class InitDBScript extends Script {
         
         // Create the database and user
         $db = new DB('mysql');
-        $db->setSocket(MYSQL_SOCKET);
+
+        if (defined('MYSQL_SOCKET')) {
+            $db->setSocket(MYSQL_SOCKET);
+        } else {
+            $db->setHost(MYSQL_HOST, MYSQL_PORT);
+        }
+
         $db->setCredentials($rootDBUser, $rootDBPassword);
         
         $create = "CREATE DATABASE IF NOT EXISTS " . MYSQL_DB . " DEFAULT CHARACTER SET = 'utf8'";
