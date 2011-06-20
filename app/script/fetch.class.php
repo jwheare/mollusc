@@ -113,15 +113,11 @@ class Fetch extends CoreScript {
         if ($browser->getUrl() != "https://oyster.tfl.gov.uk/oyster/loggedin.do") {
             $this->error("Invalid logged in URL\n");
         }
-
-        if (OYSTER_CARD) {
-            $cardNumber = OYSTER_CARD;
-        }
-
+        
         if (preg_match('/Card No: (\d+)/', $page, $matches)) {
             // Just one card to select
             $cardNumber = $matches[1];
-        } else if ($cardNumber) {
+        } else if ($this->card) {
             // Need to select a card number
             $browser->setFieldById('select_card_no', $cardNumber);
             $page = $browser->submitFormById('selectCardForm');
@@ -166,7 +162,7 @@ class Fetch extends CoreScript {
         
         $this->username = $this->arg('username', OYSTER_USERNAME);
         $this->password = $this->arg('password', OYSTER_PASSWORD);
-        $this->card = $this->arg('password', OYSTER_CARD);
+        $this->card = $this->arg('card', OYSTER_CARD);
         
         list($headings, $rows) = $this->fetchHistory();
         $this->saveRows($rows);
