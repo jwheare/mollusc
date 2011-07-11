@@ -106,12 +106,14 @@ class Fetch extends CoreScript {
         $this->out("Logging in as {$this->username}\n");
         
         $browser = new \SimpleBrowser();
-        $browser->get('https://oyster.tfl.gov.uk/oyster/entry.do');
+        if (!$browser->get('https://oyster.tfl.gov.uk/oyster/entry.do')) {
+            $this->error("Couldn't reach the Oyster site");
+        }
         $browser->setFieldById('j_username', $this->username);
         $browser->setFieldById('j_password', $this->password);
         $page = $browser->submitFormById('sign-in');
         if ($browser->getUrl() != "https://oyster.tfl.gov.uk/oyster/loggedin.do") {
-            $this->error("Invalid logged in URL\n");
+            $this->error("Invalid logged in URL: {$browser->getUrl()}\n");
         }
         
         if (preg_match('/Card No: (\d+)/', $page, $matches)) {
