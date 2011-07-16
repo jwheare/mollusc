@@ -10,7 +10,6 @@ define('ROOT_DIR',       $_SERVER['ROOT_DIR']);
 // Web app
 define('APP_DIR',        ROOT_DIR . '/app');
 define('SCRIPT_DIR',     ROOT_DIR . '/script');
-define('LOG_DIR',        ROOT_DIR . '/log');
 define('CONF_DIR',       APP_DIR  . '/conf');
 define('CONTROLLER_DIR', APP_DIR  . '/controller');
 define('EMAIL_DIR',      APP_DIR  . '/email');
@@ -38,6 +37,10 @@ require_once('util.php');
 require_once('conf.php');
 if (file_exists(CONF_DIR . '/' . gethostname() . '.conf.php')) {
     require_once(gethostname() . '.conf.php');
+}
+
+if (!defined('LOG_DIR')) {
+    define('LOG_DIR',        ROOT_DIR . '/log');
 }
 
 if (file_exists(APP_DIR . '/init.php')) {
