@@ -140,11 +140,21 @@ abstract class Script {
     protected function warn ($string) {
         error_log($string);
     }
-    protected function error ($string = null, $status = 1) {
+    protected function warnFile ($string, $file) {
+        error_log("$string\n", 3, $file);
+    }
+    protected function errorFile ($string, $file) {
+        $this->error($string, 1, $file);
+    }
+    protected function error ($string = null, $status = 1, $file = null) {
         $this->end = true;
         $this->onError();
         if ($string) {
-            $this->warn($string);
+            if ($file) {
+                $this->warnFile($string, $file);
+            } else {
+                $this->warn($string);
+            }
         }
         exit($status);
     }
