@@ -58,7 +58,7 @@ class Twitter {
                 $message = "Twitter request too large";
                 break;
             case 500:
-                $message = 'Twitter’s having server troubles. Check their status: http://status.twitter.com/</a>';
+                $message = 'Twitter’s having server troubles. Check their status: http://status.twitter.com/';
                 break;
             case 502:
                 $message = "Twitter may be down or undergoing an upgrade, or this was just a slow query. Try again later";
