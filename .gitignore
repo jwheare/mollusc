@@ -3,5 +3,5 @@ app/data
 apache-vhost.merritt.conf
 apache-vhost.livebus.conf
 
-merritt.local.conf.php
-livebus.org.conf.php
+mollusc.local.conf.php
+mollusc.jwheare.com.conf.php
