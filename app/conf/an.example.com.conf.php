@@ -2,7 +2,7 @@
 
 // There should be one of these files for each of systems you're running the site on.
 // This is an example development config.
-// The file MUST be named as the hostname of your system, followed by ".conf.php" on the end
+// The file MUST be named as the ServerName from your apache conf, followed by ".conf.php" on the end
 
 //  Remove this line for production conf
 define('DEV', true);
