@@ -138,6 +138,8 @@ class Fetch extends CoreScript {
         
         $page = $browser->clickLink("Journey history");
         
+        $page = $browser->clickLink("Switch to the previous version");
+        
         $previousUrl = $browser->getURL();
         echo("$previousUrl\n");
         list($headings, $rows) = $this->parseStatementPage($page);
