@@ -83,6 +83,9 @@ class Model extends RelationshipCache {
             return $value->getTimestamp();
         } else if ($value instanceof Point) {
             return "{$value->latitude} {$value->longitude}";
+        } else if (is_string($value)) {
+            // Collapse white space
+            return preg_replace("/\s+/", " ", $value);
         } else {
             return $value;
         }
