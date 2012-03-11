@@ -7,7 +7,6 @@ use Core\HttpRequest;
 use Core\HttpRequestException;
 use \DOMDocument;
 use \DateTime;
-use \PDOException;
 
 require_once('simpletest/browser.php');
 
@@ -24,24 +23,6 @@ class Fetch extends CoreScript {
     protected $password = null;
     protected $card = null;
     const ROOT_URL = "https://oyster.tfl.gov.uk";
-    
-    protected function runMigrations () {
-        $migrationDir = APP_DIR  . '/migration';
-        $migrations = scandir($migrationDir);
-        $migrations = array_filter($migrations, function ($value) {
-            return $value[0] != '.';
-        });
-        natcasesort($migrations);
-        foreach ($migrations as $migration) {
-            try {
-                service('db')->execute(file_get_contents("$migrationDir/$migration"));
-            } catch (PDOException $e) {
-                if ($e->errorInfo[1] != 1060) { // Duplicate column
-                    throw $e;
-                }
-            }
-        }
-    }
     
     protected function parseTable ($table) {
         $rows = $table->getElementsByTagName("tr");
@@ -111,10 +92,6 @@ class Fetch extends CoreScript {
     }
     
     protected function saveRows ($rows) {
-        if (count($rows)) {
-            $this->runMigrations();
-        }
-        
         foreach ($rows as $row) {
             // Import
             $dt = DateTime::createFromFormat('d-M-Y H:i', "{$row['Date']} {$row['Start Time']}");
