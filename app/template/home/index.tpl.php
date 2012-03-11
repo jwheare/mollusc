@@ -164,7 +164,13 @@ if ($this->events) {
                 <tr class="<?php out($class); ?>"<?php if (!$lastDate || $lastDate->format('Y-m-j') != $event->creation_date->format('Y-m-j')): ?>
                     id="<?php out($event->creation_date->format('Y-m-j')); ?>"
                 <?php endif; ?>>
-                    <td class="date"><?php out($event->creation_date->format('D d H:i')); ?></td>
+                    <td class="date">
+                        <?php out($event->creation_date->format('D d H:i')); ?>
+                        <?php if ($event->end_date): ?>
+                            ⟶
+                            <?php out($event->end_date->format('H:i')); ?>
+                        <?php endif; ?>
+                    </td>
                     <td class="action"><?php out($event->action); ?></td>
                     <td class="location">
                         <?php if (preg_match("/^bus .*$/i", $event->location)): ?>

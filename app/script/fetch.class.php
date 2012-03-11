@@ -3,8 +3,11 @@
 namespace App\Script;
 use App\Model;
 use Core\Script as CoreScript;
+use Core\HttpRequest;
+use Core\HttpRequestException;
 use \DOMDocument;
 use \DateTime;
+use \PDOException;
 
 require_once('simpletest/browser.php');
 
@@ -20,6 +23,25 @@ class Fetch extends CoreScript {
     protected $username = null;
     protected $password = null;
     protected $card = null;
+    const ROOT_URL = "https://oyster.tfl.gov.uk";
+    
+    protected function runMigrations () {
+        $migrationDir = APP_DIR  . '/migration';
+        $migrations = scandir($migrationDir);
+        $migrations = array_filter($migrations, function ($value) {
+            return $value[0] != '.';
+        });
+        natcasesort($migrations);
+        foreach ($migrations as $migration) {
+            try {
+                service('db')->execute(file_get_contents("$migrationDir/$migration"));
+            } catch (PDOException $e) {
+                if ($e->errorInfo[1] != 1060) { // Duplicate column
+                    throw $e;
+                }
+            }
+        }
+    }
     
     protected function parseTable ($table) {
         $rows = $table->getElementsByTagName("tr");
@@ -36,6 +58,25 @@ class Fetch extends CoreScript {
                 $cells = $row->getElementsByTagName("td");
                 foreach ($cells as $j => $cell) {
                     $value = mb_ereg_replace("[\r\t\n]", "", trim(mb_ereg_replace("\xC2\xA0", " ", $cell->nodeValue)));
+                    $rowData[$headings[$j]] = $value;
+                }
+                $data[] = $rowData;
+            }
+        }
+        return array($headings, $data);
+    }
+    
+    protected function parseCsv ($csv) {
+        $rows = explode("\n", $csv);
+        // First row is the header
+        $data = array();
+        foreach ($rows as $i => $row) {
+            if ($i == 0) {
+                $headings = str_getcsv($row);
+            } else {
+                $rowData = array();
+                $values = str_getcsv($row);
+                foreach ($values as $j => $value) {
                     $rowData[$headings[$j]] = $value;
                 }
                 $data[] = $rowData;
@@ -70,22 +111,33 @@ class Fetch extends CoreScript {
     }
     
     protected function saveRows ($rows) {
-        $lastDate = null;
+        if (count($rows)) {
+            $this->runMigrations();
+        }
+        
         foreach ($rows as $row) {
-            // Blank dates are the same as previous
-            if (mb_strlen($row['Date']) < 5 && $lastDate) {
-                $row['Date'] = $lastDate;
-            }
-            $lastDate = $row['Date'];
             // Import
-            $dt = DateTime::createFromFormat('d/m/y H:i', "{$row['Date']} {$row['Time']}");
+            $dt = DateTime::createFromFormat('d-M-Y H:i', "{$row['Date']} {$row['Start Time']}");
+            $end_dt = null;
+            $action = 'Entry';
+            if ($row['End Time']) {
+                $end_dt = DateTime::createFromFormat('d-M-Y H:i', "{$row['Date']} {$row['End Time']}");
+                $action = 'Journey';
+            }
+            if ($row['Credit']) {
+                $action = 'Auto top-up';
+            }
+            $credit = $this->convertToPence($row['Credit']);
+            $charge = $this->convertToPence($row['Charge']);
+            $fare = $credit - $charge;
             $event = new Model\Event(array(
                 'creation_date' => $dt,
-                'location' => $row['Location'],
-                'action' => $row['Action'],
-                'fare' => $this->convertToPence($row['Fare']),
+                'end_date' => $end_dt,
+                'location' => $row['Journey/Action'],
+                'action' => $action,
+                'fare' => $fare,
                 'balance' => $this->convertToPence($row['Balance']),
-                'price_cap' => $this->convertToPence($row['Price cap']),
+                'note' => $row['Note'],
             ));
             if (!$this->dryRun) {
                 if ($event->loadOrCreate()) {
@@ -106,13 +158,13 @@ class Fetch extends CoreScript {
         $this->out("Logging in as {$this->username}\n");
         
         $browser = new \SimpleBrowser();
-        if (!$browser->get('https://oyster.tfl.gov.uk/oyster/entry.do')) {
+        if (!$browser->get(self::ROOT_URL . '/oyster/entry.do')) {
             $this->error("Couldn't reach the Oyster site");
         }
         $browser->setFieldById('j_username', $this->username);
         $browser->setFieldById('j_password', $this->password);
         $page = $browser->submitFormById('sign-in');
-        if ($browser->getUrl() != "https://oyster.tfl.gov.uk/oyster/loggedin.do") {
+        if ($browser->getUrl() != self::ROOT_URL . "/oyster/loggedin.do") {
             $this->error("Invalid logged in URL: {$browser->getUrl()}\n");
         }
         
@@ -134,29 +186,38 @@ class Fetch extends CoreScript {
             $this->error("Multiple cards on account, please specify one to fetch history for\n");
         }
         
-        echo("Fetching history for: $cardNumber\n");
+        $this->out("Fetching history for: $cardNumber\n");
         
-        $page = $browser->clickLink("Journey history");
+        $browser->clickLink("Journey history");
         
-        $page = $browser->clickLink("Switch to the previous version");
+        // Can only get 2 months of data
+        $from = date("d/m/Y", strtotime("yesterday -2 months"));
+        $to = date("d/m/Y", strtotime("yesterday"));
+        $this->out("$from - $to\n");
+        $page = $browser->post(self::ROOT_URL . '/oyster/journeyHistory.do', array(
+            'dateRange' => 'custom date range',
+            'offset' => 0,
+            'rows' => 0,
+            'customDateRangeSel' => false,
+            'isJSEnabledForPagenation' => false,
+            'csDateFrom' => $from,
+            'csDateTo' => $to,
+        ));
         
-        $previousUrl = $browser->getURL();
-        echo("$previousUrl\n");
-        list($headings, $rows) = $this->parseStatementPage($page);
-        
-        while ($nextUrl = $browser->getLink("Next")) {
-            $nextUrl = $nextUrl->asString();
-            if ($nextUrl == $previousUrl) {
-                echo("$nextUrl\n");
-                error_log("Next url is same as previous\n");
-                break;
+        // Find the CSV download link
+        if (preg_match('/document\.jhDownloadForm\.action="([^"]+)"/', $page, $matches)) {
+            $req = new HttpRequest;
+            try {
+                $cookies  = "JSESSIONID=" . $browser->getCurrentCookieValue("JSESSIONID") . "; ";
+                list($body, $info) = $req->send(self::ROOT_URL . $matches[1], "POST", array(), array(), $cookies);
+            } catch (HttpRequestException $exc) {
+                $this->error("Couldn't dowload CSV");
             }
-            echo("$nextUrl\n");
-            $page = $browser->clickLink("Next");
-            list($pageHeadings, $pageRows) = $this->parseStatementPage($page);
-            $rows = array_merge($rows, $pageRows);
-            $previousUrl = $nextUrl;
+        } else {
+            $this->error("Couldn't reach the Oyster site");
         }
+        
+        list($headings, $rows) = $this->parseCsv($body);
         
         return array($headings, $rows);
     }

@@ -81,12 +81,12 @@ class HttpRequest {
             CURLOPT_POSTFIELDS    => $requestParams,
         ));
     }
-    public function send($url, $method = 'GET', $requestParams = array(), $headers = array()) {
+    public function send($url, $method = 'GET', $requestParams = array(), $headers = array(), $cookieString = null) {
         // Initialise curl 
         $this->setHeaders($headers);
         curl_setopt_array($this->curl, array(
             CURLOPT_FOLLOWLOCATION => $this->followLocation,
-            CURLOPT_COOKIE         => $this->cookieString,
+            CURLOPT_COOKIE         => $cookieString ? $cookieString : $this->cookieString,
             CURLOPT_CUSTOMREQUEST  => $method,
         ));
         $this->response_headers = array();
