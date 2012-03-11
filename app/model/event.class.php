@@ -25,7 +25,27 @@ class Event extends Model {
     public function isExit () {
         return $this->action == 'Exit';
     }
+    public function isEntry () {
+        return $this->action == 'Entry';
+    }
     public function isJourney () {
         return $this->action == 'Journey';
+    }
+    public function loadOrCreate() {
+        if ($this->load()) {
+            // Exact date and action match
+            return false;
+        }
+        if ($this->end_date) {
+            // Search for Entry and Exit pairs
+            $e = new self();
+            $keys = array('creation_date', 'action');
+            if ($e->totalBy($keys, array($this->creation_date, 'Entry'))
+             && $e->totalBy($keys, array($this->end_date, 'Exit'))) {
+                 return false;
+            }
+        }
+        $this->insert();
+        return true;
     }
 }
