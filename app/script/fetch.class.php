@@ -165,8 +165,6 @@ class Fetch extends CoreScript {
         
         $this->out("Fetching history for: $cardNumber\n");
         
-        $browser->clickLink("Journey history");
-        
         // Can only get 2 months of data
         $from = date("d/m/Y", strtotime("yesterday -2 months"));
         $to = date("d/m/Y", strtotime("yesterday"));
