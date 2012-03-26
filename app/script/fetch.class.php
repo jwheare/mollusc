@@ -150,6 +150,7 @@ class Fetch extends CoreScript {
             $cardNumber = $matches[1];
         } else if ($this->card) {
             // Need to select a card number
+            $cardNumber = $this->card;
             $browser->setFieldById('select_card_no', $cardNumber);
             $page = $browser->submitFormById('selectCardForm');
             if (preg_match('/Card No: (\d+)/', $page, $matches)) {
