@@ -146,6 +146,7 @@ table.history th.action {
 table.history td.date,
 table.history th.date {
     width: 200px;
+    white-space: nowrap;
 }
 table.history td.fare,
 table.history td.balance,
