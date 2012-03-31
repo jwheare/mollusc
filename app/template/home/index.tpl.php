@@ -62,7 +62,7 @@ if ($this->events) {
                 <thead>
                     <tr>
                         <th class="date">Date</th>
-                        <th class="action">Event</th>
+                        <!-- <th class="action">Event</th> -->
                         <th class="location">Location</th>
                         <th class="fare">Fare</th>
                         <th class="balance">Balance</th>
@@ -141,7 +141,7 @@ if ($this->events) {
                         ⟶
                         <?php out($lastExit->creation_date->format('H:i')); ?>
                     </td>
-                    <td class="action">Journey</td>
+                    <!-- <td class="action">Journey</td> -->
                     <td class="location">
                         <?php if (preg_match("/.* \[london overground\]$/i", $event->location) || preg_match("/.* \[london overground\]$/i", $lastExit->location)): ?>
                             <img src="/overground.gif" width="26" height="21">
@@ -171,7 +171,7 @@ if ($this->events) {
                             <?php out($event->end_date->format('H:i')); ?>
                         <?php endif; ?>
                     </td>
-                    <td class="action"><?php out($event->action); ?></td>
+                    <!-- <td class="action"><?php out($event->action); ?></td> -->
                     <td class="location">
                         <?php if (preg_match("/^bus .*$/i", $event->location)): ?>
                             <img src="/Bus.gif">
