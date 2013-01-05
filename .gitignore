@@ -4,4 +4,5 @@ apache-vhost.merritt.conf
 apache-vhost.livebus.conf
 
 merritt.local.conf.php
+merritt.config.conf.php
 livebus.org.conf.php
