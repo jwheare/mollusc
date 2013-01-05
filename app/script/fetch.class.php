@@ -17,7 +17,9 @@ class Fetch extends CoreScript {
         'username:' => 'u:',
         'password:' => 'p:',
         'card:'     => 'c:',
+        'csv:'      => false,
     );
+    const HEADERS = 'Date,Start Time,End Time,Journey/Action,Charge,Credit,Balance,Note';
     
     protected $username = null;
     protected $password = null;
@@ -48,15 +50,26 @@ class Fetch extends CoreScript {
     }
     
     protected function parseCsv ($csv) {
+        if (!$csv) {
+            $this->error("Empty CSV");
+        }
         $rows = explode("\n", $csv);
         // First row is the header
         $data = array();
+        $headingCount = 0;
         foreach ($rows as $i => $row) {
             if ($i == 0) {
                 $headings = str_getcsv($row);
+                if ($headings != str_getcsv(self::HEADERS)) {
+                    $this->error("Invalid CSV headers:\n$row\nExpected:\n" . self::HEADERS);
+                }
+                $headingCount = count($headings);
             } else {
                 $rowData = array();
                 $values = str_getcsv($row);
+                if (count($values) != $headingCount) {
+                    $this->error("Row field count doesn't match header:\n" . self::HEADERS . "\n(line " . ($i+1) . ") $row");
+                }
                 foreach ($values as $j => $value) {
                     $rowData[$headings[$j]] = $value;
                 }
