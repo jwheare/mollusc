@@ -214,11 +214,24 @@ class Fetch extends CoreScript {
     public function run () {
         libxml_use_internal_errors(true);
         
-        $this->username = $this->arg('username', OYSTER_USERNAME);
-        $this->password = $this->arg('password', OYSTER_PASSWORD);
-        $this->card = $this->arg('card', OYSTER_CARD);
-        
-        list($headings, $rows) = $this->fetchHistory();
+        if ($csv = $this->arg('csv')) {
+            $this->out("Reading history from local file: $csv\n");
+            if (!file_exists($csv)) {
+                $this->error("No such file");
+            }
+            if (!is_readable($csv)) {
+                 $this->error("Unreadable file");   
+            }
+            $body = file_get_contents($csv);
+            list($headings, $rows) = $this->parseCsv($body);
+        } else {
+            $this->username = $this->arg('username', OYSTER_USERNAME);
+            $this->password = $this->arg('password', OYSTER_PASSWORD);
+            $this->card = $this->arg('card', OYSTER_CARD);
+            
+            list($headings, $rows) = $this->fetchHistory();
+        }
+
         $this->saveRows($rows);
         
         if (!$this->dryRun) {
