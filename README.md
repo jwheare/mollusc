@@ -4,7 +4,7 @@ You’ll get a bar chart and table breakdown of how your balance changed each mo
 
 Oyster only make 8 weeks data available at a time, but Mollusc will keep old data forever once you start importing it.
 
-![Screenshot](/jwheare/mollusc/raw/master/screenshot.png)
+![Screenshot](https://raw.github.com/jwheare/mollusc/master/screenshot.png)
 
 # Required
 
