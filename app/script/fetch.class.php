@@ -53,11 +53,14 @@ class Fetch extends CoreScript {
         if (!$csv) {
             $this->error("Empty CSV");
         }
-        $rows = explode("\n", $csv);
+        $rows = explode("\n", trim($csv));
         // First row is the header
         $data = array();
         $headingCount = 0;
         foreach ($rows as $i => $row) {
+            if (!$row) {
+                continue;
+            }
             if ($i == 0) {
                 $headings = str_getcsv($row);
                 if ($headings != str_getcsv(self::HEADERS)) {
