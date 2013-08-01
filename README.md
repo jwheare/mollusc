@@ -1,6 +1,6 @@
 Mollusc is a browser for your Oyster pay as you go history. You can run it on your server or localhost.
 
-You’ll get a bar chart and table breakdown of how your balance changed each month. Top ups are highlighted in green, fares above £3 in red. The £8 auto top-up threshold is shown as a red line.
+You’ll get a bar chart and table breakdown of how your balance changed each month. Top ups are highlighted in green, fares above £3 in red. The £10 auto top-up threshold is shown as a red line.
 
 Oyster only make 8 weeks data available at a time, but Mollusc will keep old data forever once you start importing it.
 
