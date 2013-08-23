@@ -110,7 +110,11 @@ class Fetch extends CoreScript {
     protected function saveRows ($rows) {
         foreach ($rows as $row) {
             // Import
-            $dt = DateTime::createFromFormat('d-M-Y H:i', "{$row['Date']} {$row['Start Time']}");
+            $startTime = $row['Start Time'];
+            if (!$startTime) {
+                $startTime = "00:00";
+            }
+            $dt = DateTime::createFromFormat('d-M-Y H:i', "{$row['Date']} {$startTime}");
             $end_dt = null;
             $action = 'Entry';
             if ($row['End Time']) {
