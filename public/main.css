@@ -110,7 +110,7 @@ table.graph tr.bars a.bar:hover span.low {
 }
 table.graph tr.bars span.limit {
     position: absolute;
-    bottom: 80px;
+    bottom: 100px;
     left: 0;
     width: 100%;
     padding-right: 1px;
