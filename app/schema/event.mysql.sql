@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `event`;
 CREATE TABLE `event` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `end_date` timestamp DEFAULT NULL,
+  `end_date` timestamp NULL DEFAULT NULL,
   `location` text,
   `action` varchar(255) NOT NULL,
   `fare` int(11),
