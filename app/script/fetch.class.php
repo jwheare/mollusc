@@ -161,7 +161,7 @@ class Fetch extends CoreScript {
         $browser->setFieldById('j_username', $this->username);
         $browser->setFieldById('j_password', $this->password);
         $page = $browser->submitFormById('sign-in');
-        if ($browser->getUrl() != self::ROOT_URL . "/oyster/loggedin.do") {
+        if ($browser->getUrl() != self::ROOT_URL . "/oyster/oyster/selectCard.do?method=display") {
             $this->error("Invalid logged in URL: {$browser->getUrl()}\n");
         }
         
