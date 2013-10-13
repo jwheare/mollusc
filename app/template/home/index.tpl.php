@@ -102,6 +102,7 @@ if ($this->events) {
             }
             
             $fareSign = '';
+            $class = '';
             if ($fare < 0) {
                 $fare *= -1;
                 $fareTotal += $fare;
