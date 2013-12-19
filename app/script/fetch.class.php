@@ -24,7 +24,7 @@ class Fetch extends CoreScript {
     protected $username = null;
     protected $password = null;
     protected $card = null;
-    const LOGIN_URL = "https://account.tfl.gov.uk/oyster";
+    const LOGIN_URL = "https://oyster.tfl.gov.uk/oyster/entry.do";
     const ROOT_URL = "https://oyster.tfl.gov.uk";
     
     protected function parseTable ($table) {
@@ -159,12 +159,17 @@ class Fetch extends CoreScript {
         if (!$browser->get(self::LOGIN_URL)) {
             $this->error("Couldn't reach the Oyster site");
         }
-        $browser->setFieldById('UserName', $this->username);
-        $browser->setFieldById('Password', $this->password);
+        $browser->setFieldById('j_username', $this->username);
+        $browser->setFieldById('j_password', $this->password);
         $page = $browser->submitFormById('sign-in');
         $urlParts = explode(";", $browser->getUrl());
-        $lastParts = explode("?", $urlParts[1]);
-        $builtUrl = $urlParts[0] . '?' . $lastParts[1];
+        $builtUrl = $urlParts[0];
+        if ($urlParts[1]) {
+            $lastParts = explode("?", $urlParts[1]);
+            if ($lastParts[1]) {
+                $builtUrl .= '?' . $lastParts[1];
+            }
+        }
         if ($builtUrl != self::ROOT_URL . "/oyster/oyster/selectCard.do?method=display") {
             $this->error("Invalid logged in URL: {$browser->getUrl()}\n");
         }
