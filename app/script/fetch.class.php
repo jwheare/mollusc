@@ -164,9 +164,9 @@ class Fetch extends CoreScript {
         $page = $browser->submitFormById('sign-in');
         $urlParts = explode(";", $browser->getUrl());
         $builtUrl = $urlParts[0];
-        if ($urlParts[1]) {
+        if (isset($urlParts[1])) {
             $lastParts = explode("?", $urlParts[1]);
-            if ($lastParts[1]) {
+            if (isset($lastParts[1])) {
                 $builtUrl .= '?' . $lastParts[1];
             }
         }
