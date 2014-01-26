@@ -160,7 +160,9 @@ class Fetch extends CoreScript {
             $this->error("Couldn't reach the Oyster site");
         }
         $browser->setFieldById('j_username', $this->username);
+        $browser->setFieldById('UserName', $this->username);
         $browser->setFieldById('j_password', $this->password);
+        $browser->setFieldById('Password', $this->password);
         $page = $browser->submitFormById('sign-in');
         $urlParts = explode(";", $browser->getUrl());
         $builtUrl = $urlParts[0];
