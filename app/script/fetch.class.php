@@ -217,16 +217,17 @@ class Fetch extends CoreScript {
             try {
                 $cookies  = "JSESSIONID=" . $browser->getCurrentCookieValue("JSESSIONID") . "; ";
                 list($body, $info) = $req->send(self::ROOT_URL . $matches[1], "POST", array(), array(), $cookies);
+
+                list($headings, $rows) = $this->parseCsv($body);
+                
+                return array($headings, $rows);
             } catch (HttpRequestException $exc) {
                 $this->error("Couldn't dowload CSV");
             }
         } else {
-            $this->error("Couldn't reach the Oyster site");
+            $this->out("No CSV link\n");
+            $this->end();
         }
-        
-        list($headings, $rows) = $this->parseCsv($body);
-        
-        return array($headings, $rows);
     }
     
     public function run () {
