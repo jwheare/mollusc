@@ -1,3 +1,9 @@
+# Abandoned
+
+This project is abandoned as of 6 October 2015. The oyster site has changed and the scraper no longer works. Feel free to fork and fix it. I no longer live in London so don't have a personal use for it anymore.
+
+---
+
 Mollusc is a browser for your Oyster pay as you go history. You can run it on your server or localhost.
 
 You’ll get a bar chart and table breakdown of how your balance changed each month. Top ups are highlighted in green, fares above £3 in red. The £10 auto top-up threshold is shown as a red line.
